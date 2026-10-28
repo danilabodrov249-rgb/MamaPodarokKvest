@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#18071a">
+    <title>С Днём Рождения, любимая Мамочка! ❤️ Королевский квест</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #120412;
+            --wine: #350928;
+            --ruby: #630c3a;
+            --rose: #ff3366;
+            --rose-bright: #ff6699;
+            --gold: #ffbe3b;
+            --gold-bright: #ffe885;
+            --gold-glow: rgba(255, 190, 59, 0.55);
+            --amber: #ff8838;
+            --emerald: #10b981;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 215, 120, 0.32);
+            --text-light: #fff5f8;
+            --text-muted: #e7cad8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 10% 15%, #470d30 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, #300a3d 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #20051d 0%, #120412 65%, #090209 100%);
+            overflow: hidden;
+            pointer-events: none;
+            transform: translateZ(0);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(85px);
+            opacity: 0.45;
+            will-change: transform;
+            animation: floatOrb 18s infinite alternate ease-in-out;
+        }
+
+        .orb-1 { width: 440px; height: 440px; background: radial-gradient(circle, var(--rose), transparent 70%); top: -8%; left: -8%; }
+        .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, var(--amber), transparent 70%); bottom: 8%; right: -10%; animation-delay: -5s; }
+        .orb-3 { width: 380px; height: 380px; background: radial-gradient(circle, #8a156b, transparent 70%); top: 40%; left: 30%; animation-delay: -9s; }
+
+        @keyframes floatOrb {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(45px, -40px, 0) scale(1.12); }
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rose), var(--gold), var(--amber), var(--rose-bright));
+            width: 0%;
+            z-index: 9999;
+            box-shadow: 0 0 14px var(--gold);
+            transition: width 0.12s linear;
+        }
+
+        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+
+        #quest-tracker {
+            position: fixed;
+            top: 14px;
+            right: 14px;
+            max-width: calc(100vw - 28px);
+            background: linear-gradient(135deg, rgba(63, 12, 45, 0.96), rgba(22, 5, 20, 0.98));
+            border: 2px solid var(--gold);
+            padding: 9px 18px;
+            border-radius: 50px;
+            z-index: 9990;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 20px var(--gold-glow);
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--gold-bright);
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #quest-tracker.pop { animation: trackerPop 0.45s ease; }
+
+        @keyframes trackerPop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.14) rotate(-2deg); }
+        }
+
+        .key-slots {
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .key-slot {
+            font-size: 1.25rem;
+            display: inline-block;
+            transition: transform 0.3s, filter 0.3s;
+            filter: grayscale(1) opacity(0.35);
+        }
+
+        .key-slot.found {
+            filter: none;
+            animation: keyAppear 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes keyAppear {
+            0% { transform: scale(0.2) rotate(-60deg); }
+            60% { transform: scale(1.4) rotate(15deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+
+        .flying-key {
+            position: fixed;
+            z-index: 10005;
+            font-size: 3rem;
+            pointer-events: none;
+            filter: drop-shadow(0 0 20px var(--gold));
+            transition: all 0.95s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        #gift-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #3b0928 0%, #120412 65%, #050106 100%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 24px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #gift-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .hero-chest {
+            font-size: 5rem;
+            margin-bottom: 12px;
+            animation: bounceChest 1.5s infinite ease-in-out;
+            filter: drop-shadow(0 0 35px var(--rose));
+        }
+
+        @keyframes bounceChest {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-24px) rotate(4deg); }
+        }
+
+        .open-quest-btn {
+            background: linear-gradient(45deg, var(--rose), var(--amber), var(--gold));
+            background-size: 200% 200%;
+            animation: gradientMove 3s ease infinite;
+            color: #17040e;
+            border: none;
+            padding: 18px 42px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 35px rgba(255, 51, 102, 0.65);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-top: 24px;
+            transition: transform 0.2s, box-shadow 0.25s;
+        }
+
+        .open-quest-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 50px rgba(255, 190, 59, 0.85);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .petals-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            top: -10%;
+            animation: fall linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes fall {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.95; }
+            50% { transform: translate3d(35px, 55vh, 0) rotate(180deg); opacity: 0.85; }
+            100% { transform: translate3d(-25px, 110vh, 0) rotate(360deg); opacity: 0; }
+        }
+
+        .hero {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px 70px;
+            position: relative;
+        }
+
+        .date-badge {
+            background: rgba(255, 190, 59, 0.12);
+            border: 1px solid var(--gold);
+            padding: 10px 26px;
+            border-radius: 50px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            letter-spacing: 2.2px;
+            margin-bottom: 24px;
+            color: var(--gold-bright);
+            box-shadow: 0 0 20px rgba(255, 190, 59, 0.25);
+        }
+
+        .hero-avatar {
+            width: clamp(140px, 32vw, 190px);
+            height: clamp(140px, 32vw, 190px);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 51, 102, 0.35), rgba(255, 190, 59, 0.15));
+            border: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: clamp(3.8rem, 11vw, 5.2rem);
+            box-shadow: 0 0 50px rgba(255, 51, 102, 0.45);
+            animation: avatarFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes avatarFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 8vw, 5.2rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--gold-bright) 45%, #ff8da6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.16rem;
+            max-width: 660px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .scroll-down {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.88rem;
+            animation: bounceGift 2s infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section {
+            max-width: 1040px;
+            width: calc(100% - 32px);
+            margin: 85px auto;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(14px);
+            border-radius: 34px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+            display: flex;
+            align-items: center;
+            gap: 45px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .section.visible { opacity: 1; transform: translateY(0); }
+        .section:nth-child(even) { flex-direction: row-reverse; }
+
+        .section-art {
+            flex: 0 0 310px;
+            height: 290px;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 190, 59, 0.4);
+            font-size: 5.5rem;
+            background: radial-gradient(circle at 35% 35%, #ff3366, #590d38 65%, #200418 100%);
+            box-shadow: 0 15px 40px rgba(255, 51, 102, 0.3);
+        }
+
+        .section-art.art-sun {
+            background: radial-gradient(circle at 35% 35%, #ff8838, #7a1f28 65%, #200418 100%);
+            box-shadow: 0 15px 40px rgba(255, 136, 56, 0.3);
+        }
+
+        .section-text h2 { font-size: 2.8rem; color: var(--gold-bright); margin-bottom: 14px; }
+        .section-text p { font-size: 1.13rem; color: var(--text-muted); line-height: 1.8; }
+
+        /* КОМПЛИМЕНТЫ И ПОИСК КЛЮЧА 1 */
+        .compliments-section {
+            max-width: 1040px;
+            width: calc(100% - 32px);
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        .compliments-section h2 { font-size: 3.2rem; color: var(--gold); margin-bottom: 10px; }
+        .compliments-section p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px; }
+
+        .hint-btn-wrapper {
+            margin-bottom: 28px;
+        }
+
+        .search-hint-btn {
+            background: linear-gradient(45deg, var(--wine), var(--ruby));
+            border: 2px solid var(--gold);
+            color: var(--gold-bright);
+            padding: 13px 28px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 51, 102, 0.35);
+            transition: all 0.25s;
+        }
+
+        .search-hint-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        .revealed-hint-text {
+            display: none;
+            max-width: 650px;
+            margin: 15px auto 25px;
+            padding: 16px 24px;
+            background: rgba(255, 190, 59, 0.12);
+            border: 1px dashed var(--gold);
+            border-radius: 20px;
+            color: var(--gold-bright);
+            font-size: 1.08rem;
+            animation: taskSlideIn 0.5s ease forwards;
+        }
+
+        .revealed-hint-text.active { display: block; }
+
+        .qualities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .quality-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 26px 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            user-select: none;
+        }
+
+        .quality-card:hover, .quality-card.active {
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.28), rgba(255, 190, 59, 0.22));
+            border-color: var(--gold);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(255, 51, 102, 0.35);
+        }
+
+        .quality-icon { font-size: 2.6rem; margin-bottom: 10px; }
+        .quality-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--gold-bright); margin-bottom: 8px; }
+        .quality-desc { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* ЦЕНТР КВЕСТА */
+        .quest-hub {
+            max-width: 920px;
+            width: calc(100% - 32px);
+            margin: 85px auto;
+            padding: 45px 35px;
+            background: linear-gradient(160deg, rgba(71, 13, 48, 0.92), rgba(28, 6, 25, 0.96));
+            border: 2px dashed var(--gold);
+            border-radius: 36px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 51, 102, 0.35);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .quest-hub.visible { opacity: 1; transform: translateY(0); }
+        .quest-hub h2 { font-size: 2.7rem; color: var(--gold); margin-bottom: 12px; }
+        .quest-hub p { font-size: 1.12rem; color: var(--text-muted); margin-bottom: 24px; }
+
+        .task-box {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 190, 59, 0.35);
+            border-radius: 22px;
+            padding: 28px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .task-box.active {
+            display: block;
+            animation: taskSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes taskSlideIn {
+            0% { opacity: 0; transform: translateY(20px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .quest-input {
+            padding: 13px 22px;
+            border-radius: 30px;
+            border: 2px solid var(--gold);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.15rem;
+            text-align: center;
+            outline: none;
+            width: 85%;
+            max-width: 340px;
+            margin-bottom: 16px;
+            transition: all 0.25s;
+        }
+
+        .quest-input:focus {
+            border-color: var(--gold-bright);
+            box-shadow: 0 0 20px rgba(255, 190, 59, 0.5);
+            transform: scale(1.02);
+        }
+
+        .quest-submit-btn {
+            background: linear-gradient(45deg, var(--rose), var(--amber));
+            color: #fff;
+            border: none;
+            padding: 13px 32px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+            transition: transform 0.2s, box-shadow 0.25s;
+        }
+
+        .quest-submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        .choice-btn {
+            background: rgba(255, 190, 59, 0.14);
+            border: 1px solid var(--gold);
+            color: var(--text-light);
+            padding: 13px 24px;
+            margin: 8px;
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+
+        .choice-btn:hover {
+            background: var(--gold);
+            color: #1a040e;
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 22px var(--gold-glow);
+        }
+
+        .shake {
+            animation: shakeBtn 0.45s ease;
+            border-color: var(--rose) !important;
+            background: rgba(255, 51, 102, 0.3) !important;
+        }
+
+        @keyframes shakeBtn {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-9px) rotate(-3deg); }
+            40% { transform: translateX(9px) rotate(3deg); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+
+        .correct-pulse {
+            animation: correctGlow 0.6s ease;
+            background: var(--emerald) !important;
+            color: #fff !important;
+        }
+
+        @keyframes correctGlow {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); box-shadow: 0 0 30px var(--emerald); }
+            100% { transform: scale(1); }
+        }
+
+        .numbers-banner {
+            max-width: 1040px;
+            width: calc(100% - 32px);
+            margin: 80px auto;
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.16) 0%, rgba(255, 190, 59, 0.14) 100%);
+            border: 1px solid var(--gold);
+            border-radius: 34px;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 51, 102, 0.25);
+        }
+
+        .numbers-banner h2 { font-size: 3.4rem; color: var(--gold-bright); margin-bottom: 35px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(18, 4, 18, 0.75);
+            border: 1px solid rgba(255, 190, 59, 0.4);
+            padding: 30px 20px;
+            border-radius: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover { transform: translateY(-8px); }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--gold), #ff8da6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        /* САМЫЙ НИЗ: СУНДУК И ПОДАРОК */
+        .final-wrapper { padding: 40px 16px 100px; }
+
+        .final-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 65px 35px;
+            background: radial-gradient(circle at top, rgba(99, 12, 58, 0.95) 0%, rgba(20, 5, 18, 0.98) 100%);
+            border-radius: 40px;
+            box-shadow: 0 30px 95px rgba(0, 0, 0, 0.85), 0 0 60px rgba(255, 51, 102, 0.4);
+            text-align: center;
+            border: 2px solid var(--gold);
+            position: relative;
+        }
+
+        .bouncing-gift-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .jumping-box-wrap {
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 15px;
+            perspective: 800px;
+        }
+
+        .jumping-box {
+            font-size: 6.8rem;
+            display: inline-block;
+            animation: bounceGift 1.35s infinite ease-in-out;
+            filter: drop-shadow(0 15px 30px rgba(255, 51, 102, 0.7));
+            user-select: none;
+            transition: transform 0.25s, filter 0.25s;
+        }
+
+        .jumping-box:hover {
+            transform: scale(1.08) rotate(-4deg);
+            filter: drop-shadow(0 20px 45px var(--gold-glow));
+        }
+
+        @keyframes bounceGift {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0); }
+            30% { transform: translateY(-40px) scale(1.1) rotate(-8deg); }
+            50% { transform: translateY(-22px) rotate(6deg); }
+            70% { transform: translateY(0) scale(1.04) rotate(-3deg); }
+        }
+
+        .chest-locks-overlay {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: rgba(18, 4, 18, 0.9);
+            padding: 6px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--gold);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            white-space: nowrap;
+        }
+
+        .lock-badge-icon {
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .lock-badge-icon.unlocked {
+            filter: drop-shadow(0 0 10px var(--gold));
+            animation: keyAppear 0.5s ease;
+        }
+
+        .locked-msg {
+            font-size: 1.25rem;
+            color: #ff9eb5;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .denied-alert {
+            max-width: 520px;
+            margin: 18px auto 0;
+            padding: 14px 22px;
+            background: rgba(255, 51, 102, 0.22);
+            border: 1px solid var(--rose);
+            border-radius: 18px;
+            font-size: 0.98rem;
+            color: #ffb8cb;
+            display: none;
+            animation: shakeBtn 0.45s ease;
+        }
+
+        .denied-alert.show { display: block; }
+
+        #unlocked-surprise-stage {
+            display: none;
+            animation: revealSurprise 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes revealSurprise {
+            0% { opacity: 0; transform: scale(0.86) rotateX(20deg); }
+            60% { transform: scale(1.03) rotateX(-2deg); }
+            100% { opacity: 1; transform: scale(1) rotateX(0); }
+        }
+
+        .music-player-card {
+            max-width: 620px;
+            margin: 0 auto 35px;
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.28), rgba(255, 190, 59, 0.2));
+            border: 2px solid var(--gold);
+            border-radius: 28px;
+            padding: 22px 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 15px 40px rgba(255, 51, 102, 0.35);
+            text-align: left;
+        }
+
+        .vinyl-disc {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold) 18%, #18071a 20%, #3b0928 45%, #120412 70%);
+            border: 3px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            box-shadow: 0 0 20px var(--gold-glow);
+            flex-shrink: 0;
+        }
+
+        .vinyl-disc.playing { animation: spinDisc 5s linear infinite; }
+
+        @keyframes spinDisc {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .player-info { flex: 1; min-width: 0; }
+        .player-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .play-song-btn {
+            background: var(--gold);
+            color: #17040e;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 0.92rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--gold-glow);
+            transition: transform 0.2s;
+        }
+
+        .play-song-btn:hover { transform: scale(1.05); }
+
+        .royal-crown {
+            font-size: 3.8rem;
+            margin-bottom: 12px;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px var(--gold));
+            animation: avatarFloat 3s infinite ease-in-out;
+        }
+
+        .mom-photo-container {
+            width: 310px;
+            height: 390px;
+            margin: 0 auto 35px;
+            position: relative;
+            border-radius: 30px;
+            padding: 8px;
+            background: linear-gradient(135deg, var(--gold), var(--rose), var(--amber), var(--gold));
+            background-size: 300% 300%;
+            box-shadow: 0 20px 55px rgba(255, 51, 102, 0.55);
+            animation: avatarFloat 5s ease-in-out infinite, gradientMove 6s ease infinite;
+        }
+
+        .mom-photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 23px;
+            display: block;
+        }
+
+        .final-section h2 {
+            font-size: clamp(2.3rem, 6vw, 3.8rem);
+            background: linear-gradient(to right, #ffffff, var(--gold-bright), #ff9eb5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .final-message {
+            font-size: 1.22rem;
+            line-height: 1.9;
+            color: var(--text-light);
+            max-width: 710px;
+            margin: 0 auto 35px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 26px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 190, 59, 0.3);
+            text-align: left;
+            min-height: 150px;
+        }
+
+        .celebrate-btn {
+            background: linear-gradient(45deg, var(--rose), var(--gold));
+            color: #17040e;
+            border: none;
+            padding: 19px 45px;
+            font-size: 1.15rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(255, 51, 102, 0.55);
+            transition: transform 0.2s, box-shadow 0.25s;
+        }
+
+        .celebrate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px var(--gold-glow);
+        }
+
+        .click-heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 26px;
+            animation: flyUp 0.9s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes flyUp {
+            0% { transform: translate3d(0, 0, 0) scale(0.8); opacity: 1; }
+            100% { transform: translate3d(0, -85px, 0) scale(1.5); opacity: 0; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px 20px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            background: rgba(10, 2, 10, 0.9);
+            border-top: 1px solid rgba(255, 190, 59, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .section, .section:nth-child(even) { flex-direction: column; text-align: center; }
+            .section-art { width: 100%; max-width: 280px; height: 230px; flex: none; }
+            .music-player-card { flex-direction: column; text-align: center; }
+            .final-message { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div id="quest-tracker" onclick="scrollToCurrentQuest()">
+        <span>Ключи к подарку:</span>
+        <div class="key-slots">
+            <span class="key-slot" id="slot-1">🔒</span>
+            <span class="key-slot" id="slot-2">🔒</span>
+            <span class="key-slot" id="slot-3">🔒</span>
+        </div>
+    </div>
+
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- ЭКРАН ВХОДА -->
+    <div id="gift-overlay">
+        <div class="hero-chest">🎁</div>
+        <h2 style="font-size: 3rem; color: var(--gold); line-height: 1.15; margin-bottom: 12px;">Королевский квест для Мамы</h2>
+        <p style="color: var(--text-muted); max-width: 500px; font-size: 1.1rem; margin-bottom: 25px;">
+            В самом низу сайта тебя ждёт главный подарок с песней! Но он заперт на 3 золотых замка. Пройди квест и собери ключи!
+        </p>
+        <button class="open-quest-btn" onclick="startQuest()">✨ Начать приключение ✨</button>
+    </div>
+
+    <div class="petals-container" id="petals"></div>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="date-badge">27.10.1987 — 27.10.2026 • 39 ЛЕТ</div>
+        <div class="hero-avatar">👑</div>
+        <h1>С Днём Рождения,<br>Любимая Мамочка!</h1>
+        <p>Этот день посвящён тебе — самой красивой, яркой и доброй! Листай вниз, выполняй задания и открой сундук с сюрпризом в самом конце!</p>
+        <a href="#s1" class="scroll-down"><span>Листай вниз</span> ↓</a>
+    </header>
+
+    <!-- СЕКЦИЯ 1 -->
+    <section class="section" id="s1">
+        <div class="section-art">🌸</div>
+        <div class="section-text">
+            <h2>Самая нежная забота</h2>
+            <p>Мамочка, твоя любовь — это то, что согревает в любую непогоду. Спасибо за твоё бесконечно доброе сердце, терпение и веру в меня! Ты наполняешь наш дом уютом и теплом.</p>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 2: КОМПЛИМЕНТЫ (ПОИСК 1-ГО КЛЮЧА) -->
+    <div class="compliments-section" id="compliments-block">
+        <h2>Почему ты наша Королева?</h2>
+        <p>Нажимай на карточки и читай тёплые слова! А когда будешь готова — начни поиск 1-го ключа.</p>
+
+        <div class="hint-btn-wrapper" id="hintActionBox">
+            <button class="search-hint-btn" id="searchHintBtn" onclick="revealFirstKeyHint()">🔍 Начать поиск 1-го ключа ➔</button>
+            <div class="revealed-hint-text" id="firstKeyHintText">
+                💡 <b>Загадка 1-го ключа:</b> Первый золотой ключ спрятан там, где подтверждается твой истинный королевский статус! Нажми на карточку с короной 👑!
+            </div>
+        </div>
+
+        <div class="qualities-grid">
+            <div class="quality-card" onclick="sparkCard(this, false)">
+                <div class="quality-icon">💖</div>
+                <div class="quality-title">Самая добрая</div>
+                <div class="quality-desc">Твоё сердце полно искренней нежности и тепла для всех нас.</div>
+            </div>
+            <div class="quality-card" onclick="sparkCard(this, false)">
+                <div class="quality-icon">🔥</div>
+                <div class="quality-title">Самая яркая</div>
+                <div class="quality-desc">Твоя красота и огненная харизма зажигают всё вокруг!</div>
+            </div>
+            <div class="quality-card" onclick="sparkCard(this, false)">
+                <div class="quality-icon">🌟</div>
+                <div class="quality-title">Самая мудрая</div>
+                <div class="quality-desc">Ты всегда находишь правильные слова и поддерживаешь в трудную минуту.</div>
+            </div>
+            <div class="quality-card" id="queen-card" onclick="sparkCard(this, true)">
+                <div class="quality-icon">👑</div>
+                <div class="quality-title">Наша Королева</div>
+                <div class="quality-desc">В свои 39 лет ты эталон стиля, грации и женственности!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- СЕКЦИЯ 3 -->
+    <section class="section">
+        <div class="section-art art-sun">✨</div>
+        <div class="section-text">
+            <h2>Твоя молодость и огонь</h2>
+            <p>39 лет — прекрасный возраст, когда ты расцветаешь с каждым днём! Твои сияющие глаза и прекрасная улыбка вдохновляют нас каждый день. Оставайся всегда такой же счастливой!</p>
+        </div>
+    </section>
+
+    <!-- ЦЕНТР КВЕСТА: 2-Й И 3-Й КЛЮЧИ -->
+    <section class="quest-hub" id="quest-hub-section">
+        <h2>🧭 Загадки для Мамы</h2>
+        <p id="hub-status-text">Разгадай тайны, чтобы добыть оставшиеся ключи для финального сундука!</p>
+
+        <!-- ЗАГАДКА НА 2-Й КЛЮЧ -->
+        <div class="task-box active" id="task-box-2">
+            <h3 style="color: var(--gold-bright); margin-bottom: 8px;">🗝️ Ключ №2: Золотой Год</h3>
+            <p>В каком прекрасном году родилась наша именинница?</p>
+            <input type="text" class="quest-input" id="birthYearInput" placeholder="4 цифры года" inputmode="numeric" maxlength="4" onkeydown="if(event.key === 'Enter') checkYearTask()">
+            <button class="quest-submit-btn" onclick="checkYearTask()">Проверить ➔</button>
+        </div>
+
+        <!-- ЗАГАДКА НА 3-Й КЛЮЧ -->
+        <div class="task-box" id="task-box-3">
+            <h3 style="color: var(--gold-bright); margin-bottom: 8px;">🗝️ Ключ №3: Главное признание</h3>
+            <p>Какое утверждение про маму — абсолютная правда?</p>
+            <button class="choice-btn" onclick="wrongChoice(this)">Любит поспать подольше 😴</button>
+            <button class="choice-btn" onclick="checkFinalQuiz(this)">Самая любимая и лучшая Мама во всей Вселенной! ❤️</button>
+            <button class="choice-btn" onclick="wrongChoice(this)">Слишком строгая 😅</button>
+        </div>
+
+        <!-- Сообщение когда готовы 2 и 3, но 1 пропущен -->
+        <div class="task-box" id="task-need-first-msg">
+            <h3 style="color: var(--rose-bright); margin-bottom: 6px;">⚠️ Загадки разгаданы, но где же Ключ №1?</h3>
+            <p style="margin-bottom: 15px;">Ты добыла 2-й и 3-й ключи, но сундук всё ещё заперт первым замком! Поднимись выше к разделу комплиментов и отыщи 1-й ключ Королевы!</p>
+            <button class="quest-submit-btn" onclick="scrollToCompliments()">Перейти к поиску 1-го ключа ➔</button>
+        </div>
+
+        <!-- Сообщение когда собраны ВСЕ ключи -->
+        <div class="task-box" id="task-complete-msg">
+            <h3 style="color: var(--gold); margin-bottom: 6px;">🎉 УРА! Все 3 ключа собраны!</h3>
+            <p style="margin-bottom: 0;">Сундук в самом низу готов к открытию! Скорее спускайся вниз! 👇</p>
+        </div>
+    </section>
+
+    <!-- БАННЕР С ЦИФРАМИ -->
+    <div class="numbers-banner">
+        <h2>Твой особенный день в цифрах</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">39</div>
+                <p>Лет красоты и молодости</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">14 245</div>
+                <p>Дней ты украшаешь этот мир</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <p>Моей любви к тебе</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- САМЫЙ НИЗ: СУНДУК И ГЛАВНЫЙ ПОДАРОК -->
+    <div class="final-wrapper" id="chest-area">
+        <section class="final-section" id="final-card">
+
+            <div class="bouncing-gift-container" id="locked-gift-stage">
+                <div class="jumping-box-wrap" onclick="tryOpenChest(event)">
+                    <div class="jumping-box" id="jumpingBox">🎁</div>
+                    <div class="chest-locks-overlay">
+                        <span class="lock-badge-icon" id="badge-lock-1">🔒</span>
+                        <span class="lock-badge-icon" id="badge-lock-2">🔒</span>
+                        <span class="lock-badge-icon" id="badge-lock-3">🔒</span>
+                    </div>
+                </div>
+
+                <div class="locked-msg" id="chest-status-msg">
+                    Сундук нетерпеливо подпрыгивает и просит: «Открой меня скорее!» 🎁
+                </div>
+
+                <div class="denied-alert" id="deniedAlert"></div>
+            </div>
+
+            <div id="unlocked-surprise-stage">
+                <div class="music-player-card">
+                    <div class="vinyl-disc playing" id="vinylDisc">🎵</div>
+                    <div class="player-info">
+                        <div style="font-size: 0.75rem; color: var(--gold); font-weight: 700; text-transform: uppercase;">Подарок для Мамы • 39 лет</div>
+                        <div class="player-title">Песня «Свет твоих глаз»</div>
+                        <button class="play-song-btn" id="playPauseBtn" onclick="toggleMusic()">⏸ Пауза</button>
+                        <audio id="birthdayAudio" src="pesnya.mp3" preload="auto" playsinline></audio>
+                    </div>
+                </div>
+
+                <div class="royal-crown">👑</div>
+
+                <div class="mom-photo-container">
+                    <img id="momPhoto" src="1000014298.jpg" alt="Любимая Мамочка" onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80'">
+                </div>
+
+                <h2>С 39-летием, родная моя!</h2>
+
+                <div class="final-message" id="typewriter-text"></div>
+
+                <button class="celebrate-btn" onclick="bigFireworks()">🎆 Запустить королевский салют! 🎆</button>
+            </div>
+
+        </section>
+    </div>
+
+    <footer>
+        Сделано с бесконечной любовью специально для Мамы ❤️ 27.10.2026
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const keysCollected = [false, false, false];
+        let isFirstKeyHintRevealed = false;
+        let isKeyFlying = false;
+        let chestOpened = false;
+        let sharedAudioCtx = null;
+        let synthPlaying = false;
+        let synthTimer = null;
+        let typedStarted = false;
+
+        const birthdayAudio = document.getElementById('birthdayAudio');
+
+        function unlockAudioContext() {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return;
+            if (!sharedAudioCtx) sharedAudioCtx = new AudioCtx();
+            if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
+        }
+
+        function startQuest() {
+            unlockAudioContext();
+            document.getElementById('gift-overlay').classList.add('hidden');
+            bigFireworks();
+        }
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        }, { passive: true });
+
+        /* Активация подсказки к 1-му ключу */
+        function revealFirstKeyHint() {
+            unlockAudioContext();
+            if (isFirstKeyHintRevealed) return;
+            isFirstKeyHintRevealed = true;
+            document.getElementById('searchHintBtn').style.display = 'none';
+            document.getElementById('firstKeyHintText').classList.add('active');
+            playChimeSound();
+        }
+
+        /* Анимация сбора ключа */
+        function triggerKeyFly(startX, startY, keyIndex) {
+            if (keysCollected[keyIndex - 1] || isKeyFlying) return;
+            isKeyFlying = true;
+
+            const keyEl = document.createElement('div');
+            keyEl.className = 'flying-key';
+            keyEl.innerText = '🗝️';
+            keyEl.style.left = startX + 'px';
+            keyEl.style.top = startY + 'px';
+            document.body.appendChild(keyEl);
+
+            const tracker = document.getElementById('quest-tracker');
+            const targetRect = tracker.getBoundingClientRect();
+
+            requestAnimationFrame(() => {
+                keyEl.style.left = (targetRect.left + 15) + 'px';
+                keyEl.style.top = (targetRect.top + 8) + 'px';
+                keyEl.style.transform = 'scale(0.5) rotate(720deg)';
+                keyEl.style.opacity = '0.9';
+            });
+
+            setTimeout(() => {
+                keyEl.remove();
+                setKeyCollected(keyIndex);
+                isKeyFlying = false;
+            }, 950);
+        }
+
+        function setKeyCollected(index) {
+            if (keysCollected[index - 1]) return;
+            keysCollected[index - 1] = true;
+
+            const slot = document.getElementById('slot-' + index);
+            if (slot) {
+                slot.textContent = '🗝️';
+                slot.classList.add('found');
+            }
+
+            const badgeLock = document.getElementById('badge-lock-' + index);
+            if (badgeLock) {
+                badgeLock.textContent = '🔓';
+                badgeLock.classList.add('unlocked');
+            }
+
+            playChimeSound();
+
+            const tracker = document.getElementById('quest-tracker');
+            tracker.classList.remove('pop');
+            void tracker.offsetWidth;
+            tracker.classList.add('pop');
+
+            confetti({
+                particleCount: 40,
+                spread: 70,
+                origin: { y: 0.2 },
+                colors: ['#ffbe3b', '#ff3366', '#ffffff']
+            });
+
+            // Проверяем статус квеста
+            evaluateQuestCompletion();
+        }
+
+        /* Проверка сбора всех 3 ключей */
+        function evaluateQuestCompletion() {
+            if (keysCollected.every(Boolean)) {
+                // Если собраны ВСЕ 3 ключа:
+                document.getElementById('task-need-first-msg').classList.remove('active');
+                document.getElementById('task-complete-msg').classList.add('active');
+                document.getElementById('hub-status-text').innerText = '🎉 Ура! Все 3 ключа найдены! Скорее открывай сундук!';
+                
+                const chestMsg = document.getElementById('chest-status-msg');
+                chestMsg.innerHTML = '✨ УРА! Все 3 ключа собраны! Сундук готов открыться! Нажимай на него! ✨';
+                chestMsg.style.color = 'var(--gold-bright)';
+            }
+        }
+
+        function playChimeSound() {
+            if (!sharedAudioCtx) return;
+            const osc = sharedAudioCtx.createOscillator();
+            const gain = sharedAudioCtx.createGain();
+            const now = sharedAudioCtx.currentTime;
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(1320, now + 0.25);
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            osc.connect(gain);
+            gain.connect(sharedAudioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+        }
+
+        /* 1-й КЛЮЧ: в карточке Королевы (только после нажатия кнопки поиска) */
+        function sparkCard(card, isQueen) {
+            unlockAudioContext();
+            card.classList.add('active');
+
+            if (isQueen && isFirstKeyHintRevealed && !keysCollected[0]) {
+                const rect = card.getBoundingClientRect();
+                triggerKeyFly(rect.left + rect.width / 2, rect.top + rect.height / 2, 1);
+            } else {
+                confetti({
+                    particleCount: 25,
+                    spread: 60,
+                    origin: { y: 0.65 },
+                    colors: ['#ff3366', '#ffbe3b', '#ffffff']
+                });
+            }
+        }
+
+        /* 2-й КЛЮЧ: Год рождения */
+        function checkYearTask() {
+            unlockAudioContext();
+            if (keysCollected[1]) return;
+
+            const input = document.getElementById('birthYearInput');
+            const val = input.value.trim();
+            if (val === '1987') {
+                input.classList.remove('shake');
+                input.classList.add('correct-pulse');
+
+                const rect = input.getBoundingClientRect();
+                triggerKeyFly(rect.left + rect.width / 2, rect.top + rect.height / 2, 2);
+
+                setTimeout(() => {
+                    document.getElementById('task-box-2').classList.remove('active');
+                    document.getElementById('task-box-3').classList.add('active');
+                    document.getElementById('hub-status-text').innerText = '🔥 Второй ключ получен! Отгадай последнюю загадку!';
+                }, 700);
+            } else {
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 500);
+                document.getElementById('hub-status-text').innerText = '❌ Не тот год! Вспомни дату рождения в самом верху сайта.';
+            }
+        }
+
+        /* 3-й КЛЮЧ: Викторина с проверкой 1-го ключа */
+        function checkFinalQuiz(btn) {
+            unlockAudioContext();
+            if (keysCollected[2]) return;
+
+            btn.classList.add('correct-pulse');
+            const rect = btn.getBoundingClientRect();
+            triggerKeyFly(rect.left + rect.width / 2, rect.top + rect.height / 2, 3);
+
+            setTimeout(() => {
+                document.getElementById('task-box-3').classList.remove('active');
+
+                // ПРОВЕРКА: если 1-й ключ НЕ собран, НЕ пишем, что всё готово!
+                if (!keysCollected[0]) {
+                    document.getElementById('task-need-first-msg').classList.add('active');
+                    document.getElementById('hub-status-text').innerText = '⚠️ Загадки разгаданы, но тебе всё ещё нужен Ключ №1!';
+                } else {
+                    document.getElementById('task-complete-msg').classList.add('active');
+                    document.getElementById('hub-status-text').innerText = '🎉 Все 3 ключа собраны! Скорее спускайся к сундуку!';
+                }
+            }, 700);
+        }
+
+        function wrongChoice(btn) {
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 500);
+            document.getElementById('hub-status-text').innerText = '😅 Ну нет, это не то! Выбери правильный ответ!';
+        }
+
+        function scrollToCompliments() {
+            document.getElementById('compliments-block').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToCurrentQuest() {
+            if (!keysCollected[0]) {
+                document.getElementById('compliments-block').scrollIntoView({ behavior: 'smooth' });
+            } else if (!keysCollected[1] || !keysCollected[2]) {
+                document.getElementById('quest-hub-section').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                document.getElementById('chest-area').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        /* Попытка открыть сундук (строгая блокировка без 3 ключей) */
+        function tryOpenChest(e) {
+            unlockAudioContext();
+            if (chestOpened) return;
+
+            // Считаем недостающие ключи
+            const missing = [];
+            if (!keysCollected[0]) missing.push('№1 (в комплиментах)');
+            if (!keysCollected[1]) missing.push('№2 (год рождения)');
+            if (!keysCollected[2]) missing.push('№3 (признание)');
+
+            if (missing.length > 0) {
+                const box = document.getElementById('jumpingBox');
+                box.classList.remove('shake');
+                void box.offsetWidth;
+                box.classList.add('shake');
+
+                playLockErrorSound();
+
+                const alertBox = document.getElementById('deniedAlert');
+                alertBox.innerHTML = `🔒 <b>Сундук надёжно заперт!</b><br>Не хватает ключей (${missing.length} из 3):<br><b>${missing.join(', ')}</b>`;
+                alertBox.classList.add('show');
+                setTimeout(() => alertBox.classList.remove('show'), 4000);
+                return;
+            }
+
+            // Успех — открываем
+            chestOpened = true;
+            document.getElementById('locked-gift-stage').style.display = 'none';
+            document.getElementById('unlocked-surprise-stage').style.display = 'block';
+
+            bigFireworks();
+            setTimeout(bigFireworks, 600);
+            startCelebrationMusic();
+            startTypewriter();
+        }
+
+        function playLockErrorSound() {
+            if (!sharedAudioCtx) return;
+            const osc = sharedAudioCtx.createOscillator();
+            const gain = sharedAudioCtx.createGain();
+            const now = sharedAudioCtx.currentTime;
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.linearRampToValueAtTime(80, now + 0.25);
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.connect(gain);
+            gain.connect(sharedAudioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        }
+
+        /* Синтезатор музыки */
+        function playPolyphonicCelebration() {
+            if (!sharedAudioCtx) return;
+            stopPolyphonicCelebration();
+            synthPlaying = true;
+            const melody = [
+                { f: 261.63, d: 0.38 }, { f: 261.63, d: 0.38 }, { f: 293.66, d: 0.72 },
+                { f: 261.63, d: 0.72 }, { f: 349.23, d: 0.72 }, { f: 329.63, d: 1.35 },
+                { f: 261.63, d: 0.38 }, { f: 261.63, d: 0.38 }, { f: 293.66, d: 0.72 },
+                { f: 261.63, d: 0.72 }, { f: 392.00, d: 0.72 }, { f: 349.23, d: 1.35 }
+            ];
+            let step = 0;
+            function playNext() {
+                if (!synthPlaying || !sharedAudioCtx) return;
+                const note = melody[step];
+                const now = sharedAudioCtx.currentTime;
+                const osc = sharedAudioCtx.createOscillator();
+                const gain = sharedAudioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(note.f, now);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + note.d);
+                osc.connect(gain);
+                gain.connect(sharedAudioCtx.destination);
+                osc.start(now);
+                osc.stop(now + note.d);
+                step = (step + 1) % melody.length;
+                synthTimer = setTimeout(playNext, note.d * 950);
+            }
+            playNext();
+        }
+
+        function stopPolyphonicCelebration() {
+            synthPlaying = false;
+            if (synthTimer) {
+                clearTimeout(synthTimer);
+                synthTimer = null;
+            }
+        }
+
+        function startCelebrationMusic() {
+            const vinyl = document.getElementById('vinylDisc');
+            const btn = document.getElementById('playPauseBtn');
+            birthdayAudio.play().then(() => {
+                stopPolyphonicCelebration();
+                vinyl.classList.add('playing');
+                btn.innerText = '⏸ Пауза';
+            }).catch(() => {
+                vinyl.classList.add('playing');
+                btn.innerText = '⏸ Пауза';
+                playPolyphonicCelebration();
+            });
+        }
+
+        function toggleMusic() {
+            unlockAudioContext();
+            const btn = document.getElementById('playPauseBtn');
+            const vinyl = document.getElementById('vinylDisc');
+
+            if (synthPlaying) {
+                stopPolyphonicCelebration();
+                vinyl.classList.remove('playing');
+                btn.innerText = '▶️ Включить';
+                return;
+            }
+
+            if (!birthdayAudio.paused) {
+                birthdayAudio.pause();
+                vinyl.classList.remove('playing');
+                btn.innerText = '▶️ Включить';
+            } else {
+                birthdayAudio.play().then(() => {
+                    vinyl.classList.add('playing');
+                    btn.innerText = '⏸ Пауза';
+                }).catch(() => {
+                    playPolyphonicCelebration();
+                    vinyl.classList.add('playing');
+                    btn.innerText = '⏸ Пауза';
+                });
+            }
+        }
+
+        /* Печать текста поздравления */
+        const fullText = "Любимая мамочка, поздравляю тебя с твоим Днём Рождения — с прекрасным 39-летием! Ты успешно преодолела весь королевский квест, собрала все ключи и открыла этот сюрприз!\n\nСпасибо тебе за твою бесконечную нежность, заботу, терпение и за то, что ты всегда веришь в меня. Желаю тебе крепкого здоровья, огромного счастья, исполнения самых заветных желаний и чтобы твои красивые глаза всегда сияли от радости! Я тебя очень сильно люблю! ❤️";
+
+        function startTypewriter() {
+            if (typedStarted) return;
+            typedStarted = true;
+            const container = document.getElementById('typewriter-text');
+            container.innerHTML = '';
+            let i = 0;
+            function type() {
+                if (i < fullText.length) {
+                    const ch = fullText.charAt(i);
+                    container.innerHTML += ch === '\n' ? '<br>' : ch;
+                    i++;
+                    setTimeout(type, 24);
+                } else {
+                    bigFireworks();
+                }
+            }
+            type();
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.section, .quest-hub').forEach(el => observer.observe(el));
+
+        // Падающие лепестки
+        const petalsContainer = document.getElementById('petals');
+        const count = window.innerWidth < 768 ? 14 : 22;
+        const symbols = ['🌸', '✨', '💖', '👑', '🍁'];
+        for (let i = 0; i < count; i++) {
+            let petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = (Math.random() * 6 + 6) + 's';
+            petal.style.animationDelay = (Math.random() * 6) + 's';
+            petal.style.fontSize = (Math.random() * 12 + 14) + 'px';
+            petalsContainer.appendChild(petal);
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            const heart = document.createElement('div');
+            heart.className = 'click-heart';
+            heart.innerText = ['❤️', '💖', '✨', '🌸'][Math.floor(Math.random() * 4)];
+            heart.style.left = (e.clientX - 12) + 'px';
+            heart.style.top = (e.clientY - 12) + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 900);
+        });
+
+        function bigFireworks() {
+            if (typeof confetti !== 'function') return;
+            const isMobile = window.innerWidth < 768;
+            const duration = 2.8 * 1000;
+            const end = Date.now() + duration;
+            const colors = ['#ff3366', '#ffbe3b', '#ff8838', '#ffe885', '#ffffff'];
+
+            (function frame() {
+                confetti({
+                    particleCount: isMobile ? 3 : 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.7 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: isMobile ? 3 : 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.7 },
+                    colors: colors
+                });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>
